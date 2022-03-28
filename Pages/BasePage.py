@@ -17,7 +17,7 @@ class BasePage(unittest.TestCase):
         url = "http://localhost:4444/wd/hub" if os.getenv('DOCKER') != "true" else "http://hub:4444/wd/hub"
         # cls.driver = webdriver.Chrome(executable_path="drivers/chromedriver.exe")
         # cls.driver.maximize_window()
-        options = webdriver.ChromeOptions()
+        options = Options()
         desired_capabilities = DesiredCapabilities.CHROME
         # desired_capabilities['loggingPrefs'] = {'browser': 'ALL'}
         desired_capabilities['goog:loggingPrefs'] = {'browser': 'ALL'}
@@ -25,9 +25,11 @@ class BasePage(unittest.TestCase):
             options.add_argument("--headless")
         options.add_argument("--window-size=1920,1080")
         if linux:
-            cls.driver = webdriver.Remote(RemoteConnection(url), options=options)
+            cls.driver = webdriver.Remote(RemoteConnection(url), options=options,
+                                           desired_capabilities=desired_capabilities)
         else:
-            cls.driver =webdriver.Remote(RemoteConnection(url), options=options)
+            cls.driver =webdriver.Remote(RemoteConnection(url), options=options,
+                                           desired_capabilities=desired_capabilities)
         cls.driver.maximize_window()
         cls.driver.set_page_load_timeout(3000)
         cls.driver.get("https://www.daraz.com.bd/")
